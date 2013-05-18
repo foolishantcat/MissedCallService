@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Missed Calls</string>
+    <string name="service_name">Missed Calls Service</string>
+    <string name="about">Om Missed Calls</string>
+    <string name="txt_version">Version</string>
+    <string name="menu_settings">Indstillinger</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="email_not_sent">Email blev ikke sendt</string>
+    <string name="email_sent">Email er sendt</string>
+    <string name="active">Aktiv</string>
+    <string name="inactive">Inaktiv</string>
+    <string name="exit">Afslut</string>
+    <string name="pref_email">Email indstillinger</string>
+    <string name="pref_email_summary">Email indstillinger for afsendelse af emails</string>
+    <string name="pref_username">Gmail adresse</string>
+    <string name="pref_username_summary">Gmail bruger</string>
+    <string name="pref_password">Gmail Password</string>
+    <string name="pref_password_summary">Gmail password</string>
+    <string name="pref_receiver">Modtager email</string>
+    <string name="pref_receiver_summary">Email på modtager af emails</string>
+    <string name="pref_sms_email_forward">Send ved SMS</string>
+    <string name="pref_sms_email_forward_summary">Data, som sendes ved SMS</string>
+    <string name="pref_sms_forward">Ved modtagelse af SMS</string>
+    <string name="pref_sms_forward_summary">Ved modtagelse af SMS</string>
+    <string name="pref_calls_email_forward">Send ved opkald</string>
+    <string name="pref_calls_email_forward_summary">Data, som sendes ved opkald</string>
+    <string name="pref_calls_forward">Ved modtagelse af opkald</string>
+    <string name="pref_calls_forward_summary">Ved modtagelse af opkald</string>
+    <string name="sms_received" formatted="false">En SMS fra %s sendt %s blev modtaget.</string>
+    <string name="missed_call_subject_received" formatted="false">Et ubesvaret opkald fra %s modtaget %s.</string>
+    
+</resources>

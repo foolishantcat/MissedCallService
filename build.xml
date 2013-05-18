@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+     WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again.
+-->
+<project
+    name="MissedCallService"
+    basedir="."
+    default="build" >
+
+    <property environment="env" />
+
+    <property
+        name="ECLIPSE_HOME"
+        value="../../../../eclipse4.2 - Android" />
+
+    <property
+        name="junit.output.dir"
+        value="junit" />
+
+    <property
+        name="debuglevel"
+        value="source,lines,vars" />
+
+    <property
+        name="target"
+        value="1.6" />
+
+    <property
+        name="source"
+        value="1.6" />
+
+    <path id="Android 4.2.2.libraryclasspath" >
+
+        <pathelement location="../../../../android-sdk-windows/platforms/android-17/android.jar" />
+    </path>
+
+    <path id="Android Dependencies.libraryclasspath" >
+
+        <pathelement location="libs/android-support-v4.jar" />
+    </path>
+
+    <path id="JUnit 4.libraryclasspath" >
+
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.junit_4.10.0.v4_10_0_v20120426-0900/junit.jar" />
+
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar" />
+    </path>
+
+    <path id="MissedCallService.classpath" >
+
+        <pathelement location="bin/classes" />
+
+        <path refid="Android 4.2.2.libraryclasspath" />
+
+        <path refid="Android Dependencies.libraryclasspath" />
+
+        <pathelement location="lib/activation.jar" />
+
+        <pathelement location="lib/additionnal.jar" />
+
+        <pathelement location="lib/mail.jar" />
+
+        <path refid="JUnit 4.libraryclasspath" />
+    </path>
+
+    <path id="run.UtilsTest.classpath" >
+
+        <path refid="Android 4.2.2.libraryclasspath" />
+
+        <path refid="MissedCallService.classpath" />
+    </path>
+
+    <path id="run.UtilsTest.bootclasspath" />
+
+    <target name="init" >
+
+        <mkdir dir="bin/classes" />
+
+        <copy
+            includeemptydirs="false"
+            todir="bin/classes" >
+
+            <fileset dir="src" >
+
+                <exclude name="**/*.g" />
+
+                <exclude name="**/*.java" />
+            </fileset>
+        </copy>
+
+        <copy
+            includeemptydirs="false"
+            todir="bin/classes" >
+
+            <fileset dir="gen" >
+
+                <exclude name="**/*.g" />
+
+                <exclude name="**/*.java" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="clean" >
+
+        <delete dir="bin/classes" />
+    </target>
+
+    <target
+        name="cleanall"
+        depends="clean" />
+
+    <target
+        name="build"
+        depends="build-subprojects,build-project" />
+
+    <target name="build-subprojects" />
+
+    <target
+        name="build-project"
+        depends="init" >
+
+        <echo message="${ant.project.name}: ${ant.file}" />
+
+        <javac
+            debug="true"
+            debuglevel="${debuglevel}"
+            destdir="bin/classes"
+            includeantruntime="false"
+            source="${source}"
+            target="${target}" >
+
+            <src path="src" />
+
+            <src path="gen" />
+
+            <classpath refid="MissedCallService.classpath" />
+        </javac>
+    </target>
+
+    <target
+        name="build-refprojects"
+        description="Build all projects which reference this project. Useful to propagate changes." />
+
+    <target
+        name="init-eclipse-compiler"
+        description="copy Eclipse compiler jars to ant lib directory" >
+
+        <copy todir="${ant.library.dir}" >
+
+            <fileset
+                dir="${ECLIPSE_HOME}/plugins"
+                includes="org.eclipse.jdt.core_*.jar" />
+        </copy>
+
+        <unzip dest="${ant.library.dir}" >
+
+            <patternset includes="jdtCompilerAdapter.jar" />
+
+            <fileset
+                dir="${ECLIPSE_HOME}/plugins"
+                includes="org.eclipse.jdt.core_*.jar" />
+        </unzip>
+    </target>
+
+    <target
+        name="build-eclipse-compiler"
+        description="compile project with Eclipse compiler" >
+
+        <property
+            name="build.compiler"
+            value="org.eclipse.jdt.core.JDTCompilerAdapter" />
+
+        <antcall target="build" />
+    </target>
+
+    <target name="UtilsTest" >
+
+        <mkdir dir="${junit.output.dir}" />
+
+        <junit
+            fork="yes"
+            printsummary="withOutAndErr" >
+
+            <formatter type="xml" />
+
+            <test
+                name="com.cejensen.missedcalls.UtilsTest"
+                todir="${junit.output.dir}" />
+
+            <classpath refid="run.UtilsTest.classpath" />
+
+            <bootclasspath>
+
+                <path refid="run.UtilsTest.bootclasspath" />
+            </bootclasspath>
+        </junit>
+    </target>
+
+    <target name="junitreport" >
+
+        <junitreport todir="${junit.output.dir}" >
+
+            <fileset dir="${junit.output.dir}" >
+
+                <include name="TEST-*.xml" />
+            </fileset>
+
+            <report
+                format="frames"
+                todir="${junit.output.dir}" />
+        </junitreport>
+    </target>
+
+</project>

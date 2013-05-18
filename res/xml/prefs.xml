@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="email"
+        android:summary="@string/pref_email_summary"
+        android:title="@string/pref_email" >
+        <EditTextPreference
+            android:inputType="textEmailAddress"
+            android:key="username"
+            android:summary="@string/pref_username_summary"
+            android:title="@string/pref_username" />
+        <EditTextPreference
+            android:inputType="textPassword"
+            android:key="password"
+            android:summary="@string/pref_password_summary"
+            android:title="@string/pref_password" />
+        <EditTextPreference
+            android:inputType="textEmailAddress"
+            android:key="receiver"
+            android:summary="@string/pref_receiver_summary"
+            android:title="@string/pref_receiver" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="sms_forward"
+        android:summary="@string/pref_sms_forward_summary"
+        android:title="@string/pref_sms_forward" >
+        <ListPreference
+            android:entries="@array/emailForwardOptionsSMS"
+            android:entryValues="@array/emailForwardValuesSMS"
+            android:key="emailForwardOptionsSMS"
+            android:summary="@string/pref_sms_email_forward_summary"
+            android:title="@string/pref_sms_email_forward" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="calls_forward"
+        android:summary="@string/pref_calls_forward_summary"
+        android:title="@string/pref_calls_forward" >
+        <ListPreference
+            android:entries="@array/emailForwardOptionsCall"
+            android:entryValues="@array/emailForwardValuesCall"
+            android:key="emailForwardOptionsCall"
+            android:summary="@string/pref_calls_email_forward_summary"
+            android:title="@string/pref_calls_email_forward" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

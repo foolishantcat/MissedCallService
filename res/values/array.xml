@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="emailForwardOptionsSMS">
+        <item>Intet</item>
+        <item>Kun afsender</item>
+        <item>Afsender og emne</item>
+        <item>Afsender, emne og meddelelse</item>
+    </string-array>
+    <string-array name="emailForwardValuesSMS">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="emailForwardOptionsCall">
+        <item>Intet</item>
+        <item>Kald fra</item>
+    </string-array>
+    <string-array name="emailForwardValuesCall">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+</resources>
