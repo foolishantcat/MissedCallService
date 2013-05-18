@@ -17,14 +17,12 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
-public class MissedCallActivity extends Activity
-{
-	public static final String		logMessenger	= "LOGMESSENGER";
-	public MissedCallApplication	m_app;
+public class MissedCallActivity extends Activity {
+	public static final String logMessenger = "LOGMESSENGER";
+	public MissedCallApplication m_app;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		m_app = (MissedCallApplication) getApplication();
 		m_app.m_logHandler.m_activity = this;
 		super.onCreate(savedInstanceState);
@@ -34,8 +32,7 @@ public class MissedCallActivity extends Activity
 	}
 
 	@Override
-	protected void onStart()
-	{
+	protected void onStart() {
 		Intent intentService = new Intent(this, MissedCallService.class);
 		Messenger messenger = new Messenger(m_app.m_logHandler);
 		intentService.putExtra(logMessenger, messenger);
@@ -43,39 +40,32 @@ public class MissedCallActivity extends Activity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
+	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_missed_call, menu);
 		return true;
 	}
 
-	private void refreshStartStop()
-	{
+	private void refreshStartStop() {
 		Switch startButton = (Switch) this.findViewById(R.id.startButton);
 		Database db = new Database(this);
 		db.open();
 		boolean isActive = db.getActive();
 		startButton.setChecked(isActive);
 		db.close();
-		if (isActive)
-		{
+		if (isActive) {
 			Intent intentService = new Intent(this, MissedCallService.class);
 			this.startService(intentService);
 		}
 	}
 
-	public void onStartButton(View view)
-	{
+	public void onStartButton(View view) {
 		Database db = new Database(this);
 		db.open();
-		if (db.getActive())
-		{
+		if (db.getActive()) {
 			logText(R.string.inactive);
 			db.setActive(false);
-		}
-		else
-		{
+		} else {
 			logText(R.string.active);
 			db.setActive(true);
 		}
@@ -84,48 +74,43 @@ public class MissedCallActivity extends Activity
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item)
-	{
-		switch (item.getItemId())
-		{
-		case R.id.about:
-			{
-				try
-				{
-					PackageInfo pInfo = this.getPackageManager().getPackageInfo(this.getPackageName(), PackageManager.GET_META_DATA);
-					String message = MissedCallActivity.this.getResources().getString(R.string.app_name) + " "
-							+ MissedCallActivity.this.getResources().getString(R.string.txt_version) + " " + pInfo.versionName;
-					Dialog aboutDialog = new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher).setMessage(message).setTitle(R.string.about)
-							.create();
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.about: {
+			try {
+				PackageInfo pInfo = this.getPackageManager().getPackageInfo(
+						this.getPackageName(), PackageManager.GET_META_DATA);
+				String message = MissedCallActivity.this.getResources()
+						.getString(R.string.app_name)
+						+ " "
+						+ MissedCallActivity.this.getResources().getString(
+								R.string.txt_version) + " " + pInfo.versionName;
+				Dialog aboutDialog = new AlertDialog.Builder(this)
+						.setIcon(R.drawable.ic_launcher).setMessage(message)
+						.setTitle(R.string.about).create();
 
-					aboutDialog.show();
-				}
-				catch (NameNotFoundException e)
-				{
-				}
-
+				aboutDialog.show();
+			} catch (NameNotFoundException e) {
 			}
+
+		}
 			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
 
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		switch (item.getItemId())
-		{
-		case R.id.settings:
-			{
-				Intent settingsIntent = new Intent(this, PrefsActivity.class);
-				startActivity(settingsIntent);
-				return true;
-			}
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.settings: {
+			Intent settingsIntent = new Intent(this, PrefsActivity.class);
+			startActivity(settingsIntent);
+			return true;
+		}
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void refreshLog()
-	{
+	public void refreshLog() {
 		final TextView logView = (TextView) findViewById(R.id.editLog);
 		Database db = new Database(this);
 		db.open();
@@ -133,16 +118,14 @@ public class MissedCallActivity extends Activity
 		db.close();
 
 		StringBuilder sb = new StringBuilder();
-		for (LogEntry log : logEntries)
-		{
+		for (LogEntry log : logEntries) {
 			sb.append(log.toString());
 			sb.append('\n');
 		}
 		logView.setText(sb.toString());
 	}
 
-	public void logText(LogEntry log)
-	{
+	public void logText(LogEntry log) {
 		Database db = new Database(this);
 		db.open();
 		db.insertLogEntry(log);
@@ -151,8 +134,7 @@ public class MissedCallActivity extends Activity
 		refreshLog();
 	}
 
-	public void logText(int id)
-	{
+	public void logText(int id) {
 		Date date = new Date();
 		String txt = getString(id);
 		logText(new LogEntry(date, txt));
