@@ -3,9 +3,9 @@ package com.cejensen.missedcalls;
 import java.util.Date;
 
 public class LogEntry {
-	private long m_id;
-	private Date m_date;
-	private String m_logText;
+	private long		m_id;
+	private Date		m_date;
+	private String	m_logText;
 
 	public LogEntry(Date date, String logText) {
 		m_id = 0;

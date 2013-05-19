@@ -6,8 +6,7 @@ import java.util.Locale;
 
 public class Utils {
 	public static String getFormattedDateTime(Date date) {
-		DateFormat dateFormatter = DateFormat.getDateTimeInstance(
-				DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.getDefault());
+		DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.getDefault());
 		String formattedDate = dateFormatter.format(date);
 		return formattedDate;
 	}

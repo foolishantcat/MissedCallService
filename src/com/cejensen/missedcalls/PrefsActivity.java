@@ -19,12 +19,10 @@ public class PrefsActivity extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 
 		// Display the fragment as the main content.
-		getFragmentManager().beginTransaction()
-				.replace(android.R.id.content, new PrefsFragment()).commit();
+		getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment()).commit();
 	}
 
-	public static class PrefsFragment extends PreferenceFragment implements
-			OnSharedPreferenceChangeListener {
+	public static class PrefsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
@@ -58,23 +56,17 @@ public class PrefsActivity extends PreferenceActivity {
 		}
 
 		public void register() {
-			PreferenceManager.getDefaultSharedPreferences(
-					this.getPreferenceScreen().getContext())
-					.registerOnSharedPreferenceChangeListener(this);
+			PreferenceManager.getDefaultSharedPreferences(this.getPreferenceScreen().getContext()).registerOnSharedPreferenceChangeListener(this);
 		}
 
 		public void unregister() {
-			PreferenceManager.getDefaultSharedPreferences(
-					this.getPreferenceScreen().getContext())
-					.unregisterOnSharedPreferenceChangeListener(this);
+			PreferenceManager.getDefaultSharedPreferences(this.getPreferenceScreen().getContext()).unregisterOnSharedPreferenceChangeListener(this);
 		}
 
 		@Override
-		public void onSharedPreferenceChanged(
-				SharedPreferences sharedPreferences, String key) {
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 			Log.d("onSharedPreferenceChanged", "key=" + key);
-			PrefsFragment.initSummary(getPreferenceManager()
-					.findPreference(key));
+			PrefsFragment.initSummary(getPreferenceManager().findPreference(key));
 		}
 
 		private static void initSummary(Preference p) {

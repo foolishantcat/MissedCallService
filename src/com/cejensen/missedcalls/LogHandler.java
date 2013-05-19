@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 
 public class LogHandler extends Handler {
-	public MissedCallActivity m_activity;
+	public MissedCallActivity	m_activity;
 
 	@Override
 	public void handleMessage(Message message) {

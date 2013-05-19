@@ -18,8 +18,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 public class MissedCallActivity extends Activity {
-	public static final String logMessenger = "LOGMESSENGER";
-	public MissedCallApplication m_app;
+	public static final String		logMessenger	= "LOGMESSENGER";
+	public MissedCallApplication	m_app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,16 +78,10 @@ public class MissedCallActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.about: {
 			try {
-				PackageInfo pInfo = this.getPackageManager().getPackageInfo(
-						this.getPackageName(), PackageManager.GET_META_DATA);
-				String message = MissedCallActivity.this.getResources()
-						.getString(R.string.app_name)
-						+ " "
-						+ MissedCallActivity.this.getResources().getString(
-								R.string.txt_version) + " " + pInfo.versionName;
-				Dialog aboutDialog = new AlertDialog.Builder(this)
-						.setIcon(R.drawable.ic_launcher).setMessage(message)
-						.setTitle(R.string.about).create();
+				PackageInfo pInfo = this.getPackageManager().getPackageInfo(this.getPackageName(), PackageManager.GET_META_DATA);
+				String message = MissedCallActivity.this.getResources().getString(R.string.app_name) + " "
+						+ MissedCallActivity.this.getResources().getString(R.string.txt_version) + " " + pInfo.versionName;
+				Dialog aboutDialog = new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher).setMessage(message).setTitle(R.string.about).create();
 
 				aboutDialog.show();
 			} catch (NameNotFoundException e) {

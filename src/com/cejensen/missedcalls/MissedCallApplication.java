@@ -10,17 +10,17 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 
 public class MissedCallApplication extends Application {
-	public boolean m_isRunning = false;
-	public List<LogEntry> m_log = new ArrayList<LogEntry>();
-	public LogHandler m_logHandler = new LogHandler();
+	public boolean						m_isRunning		= false;
+	public List<LogEntry>			m_log					= new ArrayList<LogEntry>();
+	public LogHandler					m_logHandler	= new LogHandler();
 
-	public ServiceConnection m_connection = new ServiceConnection() {
-		public void onServiceConnected(ComponentName className, IBinder binder) {
-		}
+	public ServiceConnection	m_connection	= new ServiceConnection() {
+																						public void onServiceConnected(ComponentName className, IBinder binder) {
+																						}
 
-		public void onServiceDisconnected(ComponentName className) {
-		}
-	};
+																						public void onServiceDisconnected(ComponentName className) {
+																						}
+																					};
 
 	public MissedCallApplication() {
 		// TODO Auto-generated constructor stub
