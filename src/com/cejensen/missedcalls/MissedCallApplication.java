@@ -12,7 +12,6 @@ import android.os.IBinder;
 public class MissedCallApplication extends Application {
 	public boolean m_isRunning = false;
 	public List<LogEntry> m_log = new ArrayList<LogEntry>();
-	public MissedCallActivity m_activity = null;
 	public LogHandler m_logHandler = new LogHandler();
 
 	public ServiceConnection m_connection = new ServiceConnection() {
