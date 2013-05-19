@@ -32,7 +32,7 @@ public class UnreadSmsContentObserver extends ContentObserver {
 	public void onChange(boolean selfChange) {
 		super.onChange(selfChange);
 
-		Database db = new Database(m_service.getBaseContext());
+		MissedCallDatabase db = new MissedCallDatabase(m_service.getBaseContext());
 		db.open();
 		if (db.getActive()) {
 			handleUnreadSms();

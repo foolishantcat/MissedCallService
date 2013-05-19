@@ -48,7 +48,7 @@ public class MissedCallActivity extends Activity {
 
 	private void refreshStartStop() {
 		Switch startButton = (Switch) this.findViewById(R.id.startButton);
-		Database db = new Database(this);
+		MissedCallDatabase db = new MissedCallDatabase(this);
 		db.open();
 		boolean isActive = db.getActive();
 		startButton.setChecked(isActive);
@@ -60,7 +60,7 @@ public class MissedCallActivity extends Activity {
 	}
 
 	public void onStartButton(View view) {
-		Database db = new Database(this);
+		MissedCallDatabase db = new MissedCallDatabase(this);
 		db.open();
 		if (db.getActive()) {
 			logText(R.string.inactive);
@@ -106,7 +106,7 @@ public class MissedCallActivity extends Activity {
 
 	public void refreshLog() {
 		final TextView logView = (TextView) findViewById(R.id.editLog);
-		Database db = new Database(this);
+		MissedCallDatabase db = new MissedCallDatabase(this);
 		db.open();
 		LogEntry[] logEntries = db.getAllLogEntries();
 		db.close();
@@ -120,7 +120,7 @@ public class MissedCallActivity extends Activity {
 	}
 
 	public void logText(LogEntry log) {
-		Database db = new Database(this);
+		MissedCallDatabase db = new MissedCallDatabase(this);
 		db.open();
 		db.insertLogEntry(log);
 		db.close();
