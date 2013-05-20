@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 
 public class LogHandler extends Handler {
-	public MissedCallActivity	m_activity;
+	public MissedCallActivity	activity;
 
 	@Override
 	public void handleMessage(Message message) {
@@ -16,8 +16,8 @@ public class LogHandler extends Handler {
 		if (message.arg1 == Activity.RESULT_OK && data != null) {
 			String logText = data.getString("logtext");
 			Date logDate = new Date(data.getLong("date"));
-			if (m_activity != null) {
-				m_activity.logText(new LogEntry(logDate, logText));
+			if (activity != null) {
+				activity.logText(new LogEntry(logDate, logText));
 			}
 		}
 		super.handleMessage(message);

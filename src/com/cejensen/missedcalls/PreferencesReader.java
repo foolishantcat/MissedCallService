@@ -13,29 +13,29 @@ public class PreferencesReader {
 		Nothing, From
 	}
 
-	private Context	m_context;
+	private Context	context;
 
 	public PreferencesReader(Context activity) {
-		m_context = activity;
+		context = activity;
 	}
 
 	public String getUserName() {
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(m_context);
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		return sharedPrefs.getString("username", "");
 	}
 
 	public String getPassword() {
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(m_context);
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		return sharedPrefs.getString("password", "");
 	}
 
 	public String getReceiverEmail() {
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(m_context);
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		return sharedPrefs.getString("receiver", "");
 	}
 
 	public EmailForwardOptionsSMS getEmailForwardOptionSMS() {
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(m_context);
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		EmailForwardOptionsSMS returnValue = EmailForwardOptionsSMS.Nothing;
 		int value;
 		try {
@@ -51,7 +51,7 @@ public class PreferencesReader {
 	}
 
 	public EmailForwardOptionsCall getEmailForwardOptionCall() {
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(m_context);
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		EmailForwardOptionsCall returnValue = EmailForwardOptionsCall.Nothing;
 		int value;
 		try {

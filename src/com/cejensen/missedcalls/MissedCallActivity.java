@@ -10,7 +10,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.os.Messenger;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,13 +17,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 public class MissedCallActivity extends Activity {
-	public static final String		logMessenger	= "LOGMESSENGER";
-	public MissedCallApplication	m_app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		m_app = (MissedCallApplication) getApplication();
-		m_app.m_logHandler.m_activity = this;
+		Root.getSingleton().getLogHandler().activity = this;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_missed_call);
 		refreshStartStop();
@@ -33,9 +29,7 @@ public class MissedCallActivity extends Activity {
 
 	@Override
 	protected void onStart() {
-		Intent intentService = new Intent(this, MissedCallService.class);
-		Messenger messenger = new Messenger(m_app.m_logHandler);
-		intentService.putExtra(logMessenger, messenger);
+		Root.getSingleton().getOrStartRunningService(this);
 		super.onStart();
 	}
 
@@ -54,7 +48,7 @@ public class MissedCallActivity extends Activity {
 		startButton.setChecked(isActive);
 		db.close();
 		if (isActive) {
-			Intent intentService = new Intent(this, MissedCallService.class);
+			Intent intentService = Root.getSingleton().getOrStartRunningService(this);
 			this.startService(intentService);
 		}
 	}

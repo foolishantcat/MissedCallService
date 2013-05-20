@@ -15,12 +15,12 @@ import android.provider.CallLog.Calls;
 import android.util.Log;
 
 public class MissedCallService extends Service {
-	private ContentResolver						m_missedCallContentResolver;
-	public MissedCallContentObserver	m_missedCallContentObserver;
-	private ContentResolver						m_unreadSmsContentResolver;
-	public UnreadSmsContentObserver		m_unreadSmsContentObserver;
-	private final MissedCallBinder		m_binder	= new MissedCallBinder();
-	private Messenger									m_logMessenger;
+	private ContentResolver						missedCallContentResolver;
+	public MissedCallContentObserver	missedCallContentObserver;
+	private ContentResolver						unreadSmsContentResolver;
+	public UnreadSmsContentObserver		unreadSmsContentObserver;
+	private final MissedCallBinder		binder	= new MissedCallBinder();
+	private Messenger									logMessenger;
 
 	@Override
 	public void onCreate() {
@@ -36,56 +36,55 @@ public class MissedCallService extends Service {
 		super.onDestroy();
 		unregisterSMSObserver();
 		unregisterCallObserver();
+		Root.getSingleton().setServiceStopped();
 	}
 
 	private void registerSMSObserver() {
-		MissedCallApplication app = (MissedCallApplication) getApplicationContext();
-		PreferencesReader pr = new PreferencesReader(app);
+		PreferencesReader pr = new PreferencesReader(getApplicationContext());
 		PreferencesReader.EmailForwardOptionsSMS emailForward = pr.getEmailForwardOptionSMS();
 
 		Log.d("MissedCallService", "registerSMSObserver - emailForward: " + emailForward);
 		if (emailForward != PreferencesReader.EmailForwardOptionsSMS.Nothing) {
-			if (m_unreadSmsContentObserver == null) {
-				m_unreadSmsContentObserver = new UnreadSmsContentObserver(this, app, new LogHandler());
-				m_unreadSmsContentResolver = getContentResolver();
-				m_unreadSmsContentResolver.registerContentObserver(UnreadSmsContentObserver.m_mmssmsContent, true, m_unreadSmsContentObserver);
+			if (unreadSmsContentObserver == null) {
+				unreadSmsContentObserver = new UnreadSmsContentObserver(this, new LogHandler());
+				unreadSmsContentResolver = getContentResolver();
+				unreadSmsContentResolver.registerContentObserver(UnreadSmsContentObserver.mmssmsContent, true, unreadSmsContentObserver);
 				Log.d("MissedCallService", "SMS Observer registered.");
 			}
 		}
 	}
 
 	private void unregisterSMSObserver() {
-		if (m_unreadSmsContentObserver != null) {
-			if (m_unreadSmsContentResolver != null) {
-				m_unreadSmsContentResolver.unregisterContentObserver(m_unreadSmsContentObserver);
+		if (unreadSmsContentObserver != null) {
+			if (unreadSmsContentResolver != null) {
+				unreadSmsContentResolver.unregisterContentObserver(unreadSmsContentObserver);
 			}
-			m_unreadSmsContentObserver = null;
+			unreadSmsContentObserver = null;
 		}
 		Log.d("MissedCallService", "SMS Observer unregistered.");
 	}
 
 	private void registerCallObserver() {
-		MissedCallApplication app = (MissedCallApplication) getApplicationContext();
-		PreferencesReader pr = new PreferencesReader(app);
+		PreferencesReader pr = new PreferencesReader(getApplicationContext());
 		PreferencesReader.EmailForwardOptionsCall emailForward = pr.getEmailForwardOptionCall();
 
 		Log.d("MissedCallService", "registerCallObserver - emailForward: " + emailForward);
 		if (emailForward != PreferencesReader.EmailForwardOptionsCall.Nothing) {
-			if (m_missedCallContentObserver == null) {
-				m_missedCallContentObserver = new MissedCallContentObserver(this, app, new LogHandler());
-				m_missedCallContentResolver = getContentResolver();
-				m_missedCallContentResolver.registerContentObserver(Calls.CONTENT_URI, true, m_missedCallContentObserver);
+			if (missedCallContentObserver == null) {
+				missedCallContentObserver = new MissedCallContentObserver(this, new LogHandler());
+				missedCallContentResolver = getContentResolver();
+				missedCallContentResolver.registerContentObserver(Calls.CONTENT_URI, true, missedCallContentObserver);
 				Log.d("MissedCallService", "Missed call Observer registered.");
 			}
 		}
 	}
 
 	private void unregisterCallObserver() {
-		if (m_missedCallContentObserver != null) {
-			if (m_missedCallContentResolver != null) {
-				m_missedCallContentResolver.unregisterContentObserver(m_missedCallContentObserver);
+		if (missedCallContentObserver != null) {
+			if (missedCallContentResolver != null) {
+				missedCallContentResolver.unregisterContentObserver(missedCallContentObserver);
 			}
-			m_missedCallContentObserver = null;
+			missedCallContentObserver = null;
 		}
 		Log.d("MissedCallService", "Missed call Observer unregistered.");
 	}
@@ -101,10 +100,12 @@ public class MissedCallService extends Service {
 	public MissedCallBinder onBind(Intent intent) {
 		Log.d("MissedCallService", "onBind(" + intent + ")");
 		Bundle extras = intent.getExtras();
+		Log.d("MissedCallService", "extras: " + extras);
 		if (extras != null) {
-			m_logMessenger = (Messenger) extras.get(MissedCallActivity.logMessenger);
+			logMessenger = (Messenger) extras.get(Root.logMessenger);
+			Log.d("MissedCallService", "logMessenger: " + logMessenger);
 		}
-		return m_binder;
+		return binder;
 	}
 
 	public class MissedCallBinder extends Binder {
@@ -121,9 +122,9 @@ public class MissedCallService extends Service {
 		bundle.putLong("date", date.getTime());
 		logMsg.setData(bundle);
 		try {
-			Log.d("log", "m_logMessenger:" + m_logMessenger);
-			if (m_logMessenger != null) {
-				m_logMessenger.send(logMsg);
+			Log.d("log", "logMessenger:" + logMessenger);
+			if (logMessenger != null) {
+				logMessenger.send(logMsg);
 			}
 		} catch (android.os.RemoteException e1) {
 			Log.w(getClass().getName(), "Exception sending message", e1);

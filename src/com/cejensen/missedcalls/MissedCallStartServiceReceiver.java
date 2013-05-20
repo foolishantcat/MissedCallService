@@ -10,7 +10,7 @@ public class MissedCallStartServiceReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.d("MissedCallStartServiceReceiver", "onReceive");
-		Intent service = new Intent(context, MissedCallService.class);
+		Intent service = Root.getSingleton().getOrStartRunningService(context);
 		context.startService(service);
 	}
 
