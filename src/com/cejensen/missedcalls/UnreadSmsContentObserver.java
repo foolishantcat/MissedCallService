@@ -6,7 +6,6 @@ import java.util.HashSet;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Handler;
 import android.util.Log;
 
 public class UnreadSmsContentObserver extends ContentObserver {
@@ -16,7 +15,7 @@ public class UnreadSmsContentObserver extends ContentObserver {
 	private Uri								smsContent		= Uri.parse("content://sms");
 	private Uri								mmsContent		= Uri.parse("content://mms");
 
-	public UnreadSmsContentObserver(MissedCallService service, Handler handler) {
+	public UnreadSmsContentObserver(MissedCallService service, LogHandler handler) {
 		super(handler);
 		this.service = service;
 	}

@@ -1,26 +1,69 @@
 package com.cejensen.missedcalls;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.CallLog.Calls;
 import android.util.Log;
 
 public class MissedCallService extends Service {
-	private ContentResolver						missedCallContentResolver;
-	public MissedCallContentObserver	missedCallContentObserver;
-	private ContentResolver						unreadSmsContentResolver;
-	public UnreadSmsContentObserver		unreadSmsContentObserver;
-	private final MissedCallBinder		binder	= new MissedCallBinder();
-	private Messenger									logMessenger;
+	public static final String					KEY_TEXT							= "text";
+	public static final String					KEY_DATE							= "date";
+
+	static final int										MSG_REGISTER_CLIENT		= 1;
+	static final int										MSG_UNREGISTER_CLIENT	= 2;
+	static final int										MSG_LOG_TO_CLIENT			= 3;
+
+	private ContentResolver							missedCallContentResolver;
+	public MissedCallContentObserver		missedCallContentObserver;
+	private ContentResolver							unreadSmsContentResolver;
+	public UnreadSmsContentObserver			unreadSmsContentObserver;
+	private static ArrayList<Messenger>	mClients							= new ArrayList<Messenger>();
+
+	/**
+	 * Handler of incoming messages from clients.
+	 */
+	static class IncomingHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case MSG_REGISTER_CLIENT:
+				mClients.add(msg.replyTo);
+				break;
+			case MSG_UNREGISTER_CLIENT:
+				mClients.remove(msg.replyTo);
+				break;
+			default:
+				super.handleMessage(msg);
+			}
+		}
+	}
+
+	/**
+	 * Target we publish for clients to send messages to IncomingHandler.
+	 */
+	final Messenger	mMessenger	= new Messenger(new IncomingHandler());
+
+	/**
+	 * When binding to the service, we return an interface to our messenger for
+	 * sending messages to the service.
+	 */
+	@Override
+	public IBinder onBind(Intent intent) {
+		Log.d("MissedCallService", "onBind(" + intent + ")");
+		return mMessenger.getBinder();
+	}
 
 	@Override
 	public void onCreate() {
@@ -36,7 +79,6 @@ public class MissedCallService extends Service {
 		super.onDestroy();
 		unregisterSMSObserver();
 		unregisterCallObserver();
-		Root.getSingleton().setServiceStopped();
 	}
 
 	private void registerSMSObserver() {
@@ -96,18 +138,6 @@ public class MissedCallService extends Service {
 		return super.onStartCommand(intent, flags, startId);
 	}
 
-	@Override
-	public MissedCallBinder onBind(Intent intent) {
-		Log.d("MissedCallService", "onBind(" + intent + ")");
-		Bundle extras = intent.getExtras();
-		Log.d("MissedCallService", "extras: " + extras);
-		if (extras != null) {
-			logMessenger = (Messenger) extras.get(Root.logMessenger);
-			Log.d("MissedCallService", "logMessenger: " + logMessenger);
-		}
-		return binder;
-	}
-
 	public class MissedCallBinder extends Binder {
 		MissedCallService getService() {
 			return MissedCallService.this;
@@ -115,20 +145,17 @@ public class MissedCallService extends Service {
 	}
 
 	public void log(Date date, String logText) {
-		Message logMsg = Message.obtain();
-		logMsg.arg1 = Activity.RESULT_OK;
-		Bundle bundle = new Bundle();
-		bundle.putString("logtext", logText);
-		bundle.putLong("date", date.getTime());
-		logMsg.setData(bundle);
 		try {
-			Log.d("log", "logMessenger:" + logMessenger);
-			if (logMessenger != null) {
-				logMessenger.send(logMsg);
+			Message msg = Message.obtain(null, MissedCallService.MSG_LOG_TO_CLIENT);
+			msg.replyTo = mMessenger;
+			Bundle data = new Bundle();
+			data.putString(KEY_DATE, Utils.getFormattedDateTime(date));
+			data.putString(KEY_TEXT, logText);
+			msg.setData(data);
+			for (Messenger client : mClients) {
+				client.send(msg);
 			}
-		} catch (android.os.RemoteException e1) {
-			Log.w(getClass().getName(), "Exception sending message", e1);
+		} catch (RemoteException e) {
 		}
-
 	}
 }

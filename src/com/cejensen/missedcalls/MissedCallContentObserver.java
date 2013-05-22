@@ -7,7 +7,6 @@ import android.annotation.TargetApi;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Build;
-import android.os.Handler;
 import android.provider.CallLog.Calls;
 import android.util.Log;
 
@@ -16,7 +15,7 @@ public class MissedCallContentObserver extends ContentObserver {
 	private HashSet<Long>			idsSent	= new HashSet<Long>();
 	private MissedCallService	service;
 
-	public MissedCallContentObserver(MissedCallService service, Handler handler) {
+	public MissedCallContentObserver(MissedCallService service, LogHandler handler) {
 		super(handler);
 		this.service = service;
 	}
