@@ -9,15 +9,15 @@ import android.net.Uri;
 import android.util.Log;
 
 public class UnreadSmsContentObserver extends ContentObserver {
-	private HashSet<Long>			idsSent				= new HashSet<Long>();
-	private MissedCallService	service;
-	public static Uri					mmssmsContent	= Uri.parse("content://mms-sms/conversations/");
-	private Uri								smsContent		= Uri.parse("content://sms");
-	private Uri								mmsContent		= Uri.parse("content://mms");
+	private HashSet<Long>			mIdsSent				= new HashSet<Long>();
+	private MissedCallService	mService;
+	public static Uri					mMmsSmsContent	= Uri.parse("content://mms-sms/conversations/");
+	private Uri								mSmsContent			= Uri.parse("content://sms");
+	private Uri								mMmsContent			= Uri.parse("content://mms");
 
 	public UnreadSmsContentObserver(MissedCallService service, LogHandler handler) {
 		super(handler);
-		this.service = service;
+		this.mService = service;
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class UnreadSmsContentObserver extends ContentObserver {
 	public void onChange(boolean selfChange) {
 		super.onChange(selfChange);
 
-		MissedCallDatabase db = new MissedCallDatabase(service.getBaseContext());
+		MissedCallDatabase db = new MissedCallDatabase(mService.getBaseContext());
 		db.open();
 		if (db.getActive()) {
 			handleUnreadSms();
@@ -39,21 +39,21 @@ public class UnreadSmsContentObserver extends ContentObserver {
 
 	public void handleUnreadSms() {
 		try {
-			PreferencesReader pr = new PreferencesReader(service.getApplicationContext());
+			PreferencesReader pr = new PreferencesReader(mService.getApplicationContext());
 			PreferencesReader.EmailForwardOptionsSMS emailForward = pr.getEmailForwardOptionSMS();
 
 			if (emailForward != PreferencesReader.EmailForwardOptionsSMS.Nothing) {
-				Cursor cursor = service.getApplicationContext().getContentResolver().query(smsContent, null, "read = 0", null, "date DESC");
+				Cursor cursor = mService.getApplicationContext().getContentResolver().query(mSmsContent, null, "read = 0", null, "date DESC");
 				while (cursor.moveToNext()) {
 					long id = cursor.getLong(cursor.getColumnIndex("_id"));
-					if (!idsSent.contains(id)) {
+					if (!mIdsSent.contains(id)) {
 						String basis;
 						Date date = new Date(cursor.getLong(cursor.getColumnIndex("date")));
 						String body = cursor.getString(cursor.getColumnIndex("body"));
 						String from = cursor.getString(cursor.getColumnIndex("address"));
 
 						// SMS
-						basis = service.getApplicationContext().getString(R.string.sms_received, from, Utils.getFormattedDateTime(date));
+						basis = mService.getApplicationContext().getString(R.string.sms_received, from, Utils.getFormattedDateTime(date));
 						if (emailForward == PreferencesReader.EmailForwardOptionsSMS.From) {
 							body = "";
 						} else {
@@ -62,14 +62,14 @@ public class UnreadSmsContentObserver extends ContentObserver {
 						}
 
 						if (Utils.sendMail(pr.getUserName(), pr.getPassword(), pr.getReceiverEmail(), basis, ""))
-							idsSent.add(id);
+							mIdsSent.add(id);
 
-						service.log(date, basis);
+						mService.log(date, basis);
 					}
 				}
 				cursor.close();
 
-				cursor = service.getApplicationContext().getContentResolver().query(mmsContent, null, "read = 0", null, "date DESC");
+				cursor = mService.getApplicationContext().getContentResolver().query(mMmsContent, null, "read = 0", null, "date DESC");
 				while (cursor.moveToNext()) {
 					for (int i = 0; i < cursor.getColumnCount(); i++) {
 						if (cursor.getString(i) != null)
@@ -77,7 +77,7 @@ public class UnreadSmsContentObserver extends ContentObserver {
 					}
 					long id = cursor.getLong(cursor.getColumnIndex("_id"));
 
-					if (!idsSent.contains(id)) {
+					if (!mIdsSent.contains(id)) {
 						String basis;
 
 						// MMS
@@ -85,7 +85,7 @@ public class UnreadSmsContentObserver extends ContentObserver {
 						basis = "En MMS blev modtaget " + Utils.getFormattedDateTime(date);
 
 						if (Utils.sendMail(pr.getUserName(), pr.getPassword(), pr.getReceiverEmail(), basis, ""))
-							idsSent.add(id);
+							mIdsSent.add(id);
 					}
 				}
 				cursor.close();

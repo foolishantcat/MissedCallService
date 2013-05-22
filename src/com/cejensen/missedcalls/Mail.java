@@ -10,41 +10,41 @@ import java.util.Date;
 import java.util.Properties;
 
 public class Mail extends javax.mail.Authenticator {
-	private String		_user;
-	private String		_pass;
+	private String		mUser;
+	private String		mPass;
 
-	private String[]	_to;
-	private String		_from;
+	private String[]	mTo;
+	private String		mFrom;
 
-	private String		_port;
-	private String		_sport;
+	private String		mPort;
+	private String		mSPort;
 
-	private String		_host;
+	private String		mHost;
 
-	private String		_subject;
-	private String		_body;
+	private String		mSubject;
+	private String		mBody;
 
-	private boolean		_auth;
+	private boolean		mAuth;
 
-	private boolean		_debuggable;
+	private boolean		mDebuggable;
 
-	private Multipart	_multipart;
+	private Multipart	mMultipart;
 
 	public Mail() {
-		_host = "smtp.gmail.com"; // default smtp server
-		_port = "465"; // default smtp port
-		_sport = "465"; // default socketfactory port
+		mHost = "smtp.gmail.com"; // default smtp server
+		mPort = "465"; // default smtp port
+		mSPort = "465"; // default socketfactory port
 
-		_user = ""; // username
-		_pass = ""; // password
-		_from = ""; // email sent from
-		_subject = ""; // email subject
-		_body = ""; // email body
+		mUser = ""; // username
+		mPass = ""; // password
+		mFrom = ""; // email sent from
+		mSubject = ""; // email subject
+		mBody = ""; // email body
 
-		_debuggable = false; // debug mode on or off - default off
-		_auth = true; // smtp authentication - default on
+		mDebuggable = false; // debug mode on or off - default off
+		mAuth = true; // smtp authentication - default on
 
-		_multipart = new MimeMultipart();
+		mMultipart = new MimeMultipart();
 
 		// There is something wrong with MailCap, javamail can not find a
 		// handler
@@ -61,36 +61,36 @@ public class Mail extends javax.mail.Authenticator {
 	public Mail(String user, String pass) {
 		this();
 
-		_user = user;
-		_pass = pass;
+		mUser = user;
+		mPass = pass;
 	}
 
 	public boolean send() throws Exception {
 		Properties props = _setProperties();
 
-		if (!_user.equals("") && !_pass.equals("") && _to.length > 0 && !_from.equals("") && !_subject.equals("")) {
+		if (!mUser.equals("") && !mPass.equals("") && mTo.length > 0 && !mFrom.equals("") && !mSubject.equals("")) {
 			Session session = Session.getInstance(props, this);
 
 			MimeMessage msg = new MimeMessage(session);
 
-			msg.setFrom(new InternetAddress(_from));
+			msg.setFrom(new InternetAddress(mFrom));
 
-			InternetAddress[] addressTo = new InternetAddress[_to.length];
-			for (int i = 0; i < _to.length; i++) {
-				addressTo[i] = new InternetAddress(_to[i]);
+			InternetAddress[] addressTo = new InternetAddress[mTo.length];
+			for (int i = 0; i < mTo.length; i++) {
+				addressTo[i] = new InternetAddress(mTo[i]);
 			}
 			msg.setRecipients(MimeMessage.RecipientType.TO, addressTo);
 
-			if (_subject != null)
-				msg.setSubject(_subject);
+			if (mSubject != null)
+				msg.setSubject(mSubject);
 			msg.setSentDate(new Date());
 
 			// setup message body
 			BodyPart messageBodyPart = new MimeBodyPart();
-			if (_body != null) {
-				messageBodyPart.setText(_body);
-				_multipart.addBodyPart(messageBodyPart);
-				msg.setContent(_multipart);
+			if (mBody != null) {
+				messageBodyPart.setText(mBody);
+				mMultipart.addBodyPart(messageBodyPart);
+				msg.setContent(mMultipart);
 			}
 
 			// send email
@@ -108,29 +108,29 @@ public class Mail extends javax.mail.Authenticator {
 		messageBodyPart.setDataHandler(new DataHandler(source));
 		messageBodyPart.setFileName(filename);
 
-		_multipart.addBodyPart(messageBodyPart);
+		mMultipart.addBodyPart(messageBodyPart);
 	}
 
 	@Override
 	public PasswordAuthentication getPasswordAuthentication() {
-		return new PasswordAuthentication(_user, _pass);
+		return new PasswordAuthentication(mUser, mPass);
 	}
 
 	private Properties _setProperties() {
 		Properties props = new Properties();
 
-		props.put("mail.smtp.host", _host);
+		props.put("mail.smtp.host", mHost);
 
-		if (_debuggable) {
+		if (mDebuggable) {
 			props.put("mail.debug", "true");
 		}
 
-		if (_auth) {
+		if (mAuth) {
 			props.put("mail.smtp.auth", "true");
 		}
 
-		props.put("mail.smtp.port", _port);
-		props.put("mail.smtp.socketFactory.port", _sport);
+		props.put("mail.smtp.port", mPort);
+		props.put("mail.smtp.socketFactory.port", mSPort);
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.socketFactory.fallback", "false");
 
@@ -139,22 +139,22 @@ public class Mail extends javax.mail.Authenticator {
 
 	// the getters and setters
 	public String getBody() {
-		return _body;
+		return mBody;
 	}
 
 	public void setBody(String _body) {
-		this._body = _body;
+		this.mBody = _body;
 	}
 
 	public void setTo(String[] toArr) {
-		this._to = toArr;
+		this.mTo = toArr;
 	}
 
 	public void setFrom(String string) {
-		this._from = string;
+		this.mFrom = string;
 	}
 
 	public void setSubject(String string) {
-		this._subject = string;
+		this.mSubject = string;
 	}
 }

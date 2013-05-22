@@ -25,26 +25,18 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 public class MissedCallActivity extends Activity {
-	/** Messenger for communicating with service. */
 	Messenger				mService		= null;
-	/** Flag indicating whether we have called bind on the service. */
 	boolean					mIsBound;
-	/**
-	 * Target we publish for clients to send messages to IncomingHandler.
-	 */
 	final Messenger	mMessenger	= new Messenger(new IncomingHandler());
 
-	/**
-	 * Handler of incoming messages from service.
-	 */
 	class IncomingHandler extends Handler {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MissedCallService.MSG_LOG_TO_CLIENT:
 				Bundle data = msg.getData();
-				Date d = Utils.getDate(data.getString(MissedCallService.KEY_DATE, new Date().toString()));
-				logText(new LogEntry(d, data.getString(MissedCallService.KEY_TEXT)));
+				LogEntry le = (LogEntry) data.getSerializable(MissedCallService.KEY_LOGENTRY);
+				logText(le);
 				break;
 			default:
 				super.handleMessage(msg);

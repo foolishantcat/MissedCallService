@@ -1,7 +1,6 @@
 package com.cejensen.missedcalls;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
@@ -13,16 +12,6 @@ public class Utils {
 		DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.getDefault());
 		String formattedDate = dateFormatter.format(date);
 		return formattedDate;
-	}
-	
-	public static Date getDate(String text)
-	{
-		DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.getDefault());
-		try {
-			return dateFormatter.parse(text);
-		} catch (ParseException e) {
-		}
-		return new Date();
 	}
 
 	private static class SendMailTask extends AsyncTask<Mail, Integer, Boolean> {

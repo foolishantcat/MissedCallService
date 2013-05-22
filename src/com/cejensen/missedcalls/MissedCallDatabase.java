@@ -32,13 +32,13 @@ public class MissedCallDatabase {
 
 	private static final int		DATABASE_VERSION					= 4;
 
-	private final Context				context;
-	private DatabaseHelper			dbHelper;
-	private SQLiteDatabase			db;
+	private final Context				mContext;
+	private DatabaseHelper			mDbHelper;
+	private SQLiteDatabase			mDb;
 
 	public MissedCallDatabase(Context ctx) {
-		context = ctx;
-		dbHelper = new DatabaseHelper(context);
+		mContext = ctx;
+		mDbHelper = new DatabaseHelper(mContext);
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -75,18 +75,18 @@ public class MissedCallDatabase {
 
 	// ---opens the database---
 	public MissedCallDatabase open() throws SQLException {
-		db = dbHelper.getWritableDatabase();
+		mDb = mDbHelper.getWritableDatabase();
 
 		return this;
 	}
 
 	// ---closes the database---
 	public void close() {
-		dbHelper.close();
+		mDbHelper.close();
 	}
 
 	public boolean getActive() {
-		Cursor c = db.query(true, DATABASE_ACTIVATED_TABLE, new String[] { KEY_ACTIVE }, null, null, null, null, null, null);
+		Cursor c = mDb.query(true, DATABASE_ACTIVATED_TABLE, new String[] { KEY_ACTIVE }, null, null, null, null, null, null);
 		c.moveToFirst();
 		boolean active = false;
 		if (c.isAfterLast() == false) {
@@ -99,14 +99,14 @@ public class MissedCallDatabase {
 
 	public void setActive(boolean active) {
 		if (getActiveCount() > 0) {
-			db.delete(DATABASE_ACTIVATED_TABLE, null, null);
+			mDb.delete(DATABASE_ACTIVATED_TABLE, null, null);
 		}
 		insertActive(active);
 	}
 
 	private int getActiveCount() {
 		String sql = "SELECT COUNT(*) FROM " + DATABASE_ACTIVATED_TABLE;
-		SQLiteStatement statement = db.compileStatement(sql);
+		SQLiteStatement statement = mDb.compileStatement(sql);
 		long count = statement.simpleQueryForLong();
 		return (int) count;
 	}
@@ -114,7 +114,7 @@ public class MissedCallDatabase {
 	private int insertActive(boolean active) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_ACTIVE, active ? 1 : 0);
-		int rowId = (int) db.insert(DATABASE_ACTIVATED_TABLE, null, initialValues);
+		int rowId = (int) mDb.insert(DATABASE_ACTIVATED_TABLE, null, initialValues);
 		return rowId;
 	}
 
@@ -122,14 +122,14 @@ public class MissedCallDatabase {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_LOG_TIME, le.getDate().getTime());
 		initialValues.put(KEY_LOG_TEXT, le.getLogText());
-		int rowId = (int) db.insert(DATABASE_LOG_TABLE, null, initialValues);
+		int rowId = (int) mDb.insert(DATABASE_LOG_TABLE, null, initialValues);
 		return rowId;
 	}
 
 	// ---retrieves all the titles---
 	public LogEntry[] getAllLogEntries() {
 		List<LogEntry> logs = new ArrayList<LogEntry>();
-		Cursor c = db.query(true, DATABASE_LOG_TABLE, new String[] { KEY_LOGID, KEY_LOG_TIME, KEY_LOG_TEXT }, null, null, null, null, null, null);
+		Cursor c = mDb.query(true, DATABASE_LOG_TABLE, new String[] { KEY_LOGID, KEY_LOG_TIME, KEY_LOG_TEXT }, null, null, null, null, null, null);
 		c.moveToFirst();
 		while (c.isAfterLast() == false) {
 			Date date = new Date(c.getLong(c.getColumnIndex(KEY_LOG_TIME)));

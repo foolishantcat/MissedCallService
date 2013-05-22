@@ -1,38 +1,43 @@
 package com.cejensen.missedcalls;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class LogEntry {
-	private long		id;
-	private Date		date;
-	private String	logText;
+public class LogEntry implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
+	private long							mId;
+	private Date							mDate;
+	private String						mLogText;
 
 	public LogEntry(Date date, String logText) {
-		this.id = 0;
-		this.date = date;
-		this.logText = logText;
+		this.mId = 0;
+		this.mDate = date;
+		this.mLogText = logText;
 	}
 
 	public LogEntry(long id, Date date, String logText) {
 		this(date, logText);
-		this.id = id;
-		this.date = date;
-		this.logText = logText;
+		this.mId = id;
+		this.mDate = date;
+		this.mLogText = logText;
 	}
 
 	public long getId() {
-		return id;
+		return mId;
 	}
 
 	public Date getDate() {
-		return date;
+		return mDate;
 	}
 
 	public String getLogText() {
-		return logText;
+		return mLogText;
 	}
 
 	public String toString() {
-		return Utils.getFormattedDateTime(date) + " : " + logText;
+		return Utils.getFormattedDateTime(mDate) + " : " + mLogText;
 	}
 }
