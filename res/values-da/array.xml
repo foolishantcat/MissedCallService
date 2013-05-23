@@ -2,10 +2,10 @@
 <resources>
 
     <string-array name="emailForwardOptionsSMS">
-        <item>Nothing</item>
-        <item>Sender only</item>
-        <item>Sender and subject</item>
-        <item>Sender, subject and message</item>
+        <item>Intet</item>
+        <item>Kun afsender</item>
+        <item>Afsender og emne</item>
+        <item>Afsender, emne og meddelelse</item>
     </string-array>
     <string-array name="emailForwardValuesSMS">
         <item>0</item>
@@ -15,8 +15,8 @@
     </string-array>
 
     <string-array name="emailForwardOptionsCall">
-        <item>Nothing</item>
-        <item>Call from</item>
+        <item>Intet</item>
+        <item>Kald fra</item>
     </string-array>
     <string-array name="emailForwardValuesCall">
         <item>0</item>
