@@ -13,7 +13,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -27,22 +26,7 @@ import android.widget.TextView;
 public class MissedCallActivity extends Activity {
 	Messenger				mService		= null;
 	boolean					mIsBound;
-	final Messenger	mMessenger	= new Messenger(new IncomingHandler());
-
-	class IncomingHandler extends Handler {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case MissedCallService.MSG_LOG_TO_CLIENT:
-				Bundle data = msg.getData();
-				LogEntry le = (LogEntry) data.getSerializable(MissedCallService.KEY_LOGENTRY);
-				logText(le);
-				break;
-			default:
-				super.handleMessage(msg);
-			}
-		}
-	}
+	final Messenger	mMessenger	= new Messenger(new IncomingHandler(this));
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
