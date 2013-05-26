@@ -6,13 +6,8 @@
     <string name="about">Om Missed Calls</string>
     <string name="txt_version">Version</string>
     <string name="menu_settings">Indstillinger</string>
-    <string name="start">Start</string>
-    <string name="stop">Stop</string>
-    <string name="email_not_sent">Email blev ikke sendt</string>
-    <string name="email_sent">Email er sendt</string>
     <string name="active">Aktiv</string>
     <string name="inactive">Inaktiv</string>
-    <string name="exit">Afslut</string>
     <string name="pref_email">Email indstillinger</string>
     <string name="pref_email_summary">Email indstillinger for afsendelse af emails</string>
     <string name="pref_username">Gmail adresse</string>
